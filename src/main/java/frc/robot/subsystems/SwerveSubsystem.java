@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.helpers.SwerveHelper;
 import frc.lib.helpers.SwerveHelper.ModuleIds;
@@ -15,11 +16,11 @@ import frc.robot.Constants.RobotConstants;
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
             Motors.frontLeftDrive, Motors.frontLeftTurn, Encoders.frontLeft, Offsets.FRONT_LEFT
-            , false, true, "Front Left"
+            , true, true, "Front Left"
     );
     private final SwerveModule frontRight = new SwerveModule(
             Motors.frontRightDrive, Motors.frontRightTurn, Encoders.frontRight, Offsets.FRONT_RIGHT
-            , true, true, "Front Right"
+            , false, true, "Front Right"
     );
     private final SwerveModule backLeft = new SwerveModule(
             Motors.backwardLeftDrive, Motors.backwardLeftTurn, Encoders.backwardLeft, Offsets.BACK_LEFT
@@ -33,10 +34,10 @@ public class SwerveSubsystem extends SubsystemBase {
             RobotConstants.TRACE_WIDTH, RobotConstants.WHEEL_BASE
     );
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-            kinematics, this.gyro.getRotation2d(), getPosition()
-    );
+    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+//    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+//            kinematics, this.gyro.getRotation2d(), this.getPosition()
+//    );
 
     public SwerveSubsystem() {
         this.gyro.reset();
@@ -60,17 +61,17 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-    public Pose2d getPose() {
-        return this.odometry.getPoseMeters();
-    }
-
-    @Override
-    public void periodic() {
-        this.odometry.update(this.gyro.getRotation2d(), this.getPosition());
-    }
+//    public Pose2d getPose() {
+//        return this.odometry.getPoseMeters();
+//    }
+//
+//    @Override
+//    public void periodic() {
+//        this.odometry.update(this.gyro.getRotation2d(), this.getPosition());
+//    }
 
     public void drive(double xSpeed, double ySpeed, double rotation, boolean field) {
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(field ?
+        SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(field ?
                 ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, this.gyro.getRotation2d())
                  : new ChassisSpeeds(xSpeed, ySpeed, rotation)
         );

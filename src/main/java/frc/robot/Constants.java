@@ -2,12 +2,12 @@ package frc.robot;
 
 public class Constants {
     public static final class DriveConstants {
-        public static final double kP = 0.01;
+        public static final double kP = 0.03;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double DEAD_BAND = 0.05;
         public static final double MAX_SPEED = 0.3;
-        public static final double MAX_ANGULAR_SPEED = Math.PI / 2.0 * 1.5;
+        public static final double MAX_ANGULAR_SPEED = Math.PI / 2.0;
     }
 
     public static final class RobotConstants {
@@ -38,9 +38,9 @@ public class Constants {
     }
 
     public static final class Offsets {
-        public static final double FRONT_LEFT = 0.0;
-        public static final double FRONT_RIGHT = 0.0;
-        public static final double BACK_LEFT = 0.0;
-        public static final double BACK_RIGHT = 0.0;
+        public static final double FRONT_LEFT = 122.080078125;
+        public static final double FRONT_RIGHT = 90.791015625;
+        public static final double BACK_LEFT = -88.330078125;
+        public static final double BACK_RIGHT = -148.798828125;
     }
 }

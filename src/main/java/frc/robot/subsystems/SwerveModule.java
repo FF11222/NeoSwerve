@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -30,6 +32,9 @@ public class SwerveModule implements IDashboardProvider {
         this.driveMotor = new CANSparkMax(driveMotorPort, MotorType.kBrushless);
         this.turningMotor = new CANSparkMax(turningMotorPort, MotorType.kBrushless);
 
+        this.driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.turningMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         this.driveEncoder = this.driveMotor.getEncoder();
         this.turningEncoder = new CANCoder(turningEncoderPort);
 
@@ -42,32 +47,39 @@ public class SwerveModule implements IDashboardProvider {
         this.driveEncoder.setPositionConversionFactor(2.0 * Math.PI * RobotConstants.GEAR_RATIO * RobotConstants.WHEEL_RADIUS);
         this.driveEncoder.setVelocityConversionFactor(2.0 * Math.PI * RobotConstants.GEAR_RATIO * RobotConstants.WHEEL_RADIUS / 60);
 
+        this.turningEncoder.configSensorDirection(false);
+        this.turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        this.turningEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         this.absoluteEncoderOffset = absoluteEncoderOffset;
+    }
+
+    public double getTurningPosition() {
+        return this.turningEncoder.getAbsolutePosition() - this.absoluteEncoderOffset;
     }
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 this.driveEncoder.getVelocity()
-                , new Rotation2d(this.turningEncoder.getPosition())
+                , new Rotation2d(this.getTurningPosition())
         );
     }
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
                 this.driveEncoder.getPosition()
-                , new Rotation2d(this.turningEncoder.getPosition())
+                , new Rotation2d(this.getTurningPosition())
         );
     }
 
     public void setDesiredState(SwerveModuleState desiredState) {
         double driveOutput;
         double turningOutput;
-        SwerveModuleState state;
 
         if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
             this.stop();
         } else {
-            state = SwerveModuleState.optimize(desiredState, this.getState().angle);
+            SwerveModuleState state = SwerveModuleState.optimize(desiredState
+                    , this.getState().angle);
 
             driveOutput = state.speedMetersPerSecond / RobotConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND;
             turningOutput = this.turningPIDController.calculate(this.getState().angle.getRadians(), state.angle.getRadians());
@@ -86,7 +98,7 @@ public class SwerveModule implements IDashboardProvider {
     public void putDashboard() {
         SmartDashboard.putNumber(this.name + " DrivePosition", this.driveEncoder.getPosition());
         SmartDashboard.putNumber(this.name + " DriveVelocity", this.driveEncoder.getVelocity());
-        SmartDashboard.putNumber(this.name + " TurnPosition", this.turningEncoder.getPosition());
+        SmartDashboard.putNumber(this.name + " TurnPosition", this.getTurningPosition());
         SmartDashboard.putNumber(this.name + " TurnVelocity", this.turningEncoder.getVelocity());
 
     }

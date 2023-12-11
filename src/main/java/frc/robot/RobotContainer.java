@@ -23,8 +23,7 @@ public class RobotContainer {
     private final XboxController driveController = new XboxController(0);
     private final SwerveDriveCommand driveCommand = new SwerveDriveCommand(driveSubsystem, driveController);
     public RobotContainer() {
-        this.driveSubsystem.setDefaultCommand(driveCommand);
-        DashboardHelper.putAllRegistries();
+        this.driveSubsystem.setDefaultCommand(this.driveCommand);
         configureBindings();
     }
 

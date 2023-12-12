@@ -34,7 +34,7 @@ public class SwerveSubsystem extends SubsystemBase {
             RobotConstants.TRACE_WIDTH, RobotConstants.WHEEL_BASE
     );
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 //    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
 //            kinematics, this.gyro.getRotation2d(), this.getPosition()
 //    );

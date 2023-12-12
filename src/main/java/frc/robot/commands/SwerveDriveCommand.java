@@ -11,9 +11,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class SwerveDriveCommand extends CommandBase {
     private final SwerveSubsystem subsystem;
     private final XboxController controller;
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3.0);
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3.0);
-    private final SlewRateLimiter rotateLimiter = new SlewRateLimiter(3.0);
+//    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3.0);
+//    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3.0);
+//    private final SlewRateLimiter rotateLimiter = new SlewRateLimiter(3.0);
 
     public SwerveDriveCommand(SwerveSubsystem subsystem, XboxController controller) {
         this.subsystem = subsystem;
@@ -32,10 +32,10 @@ public class SwerveDriveCommand extends CommandBase {
         double rotation = -MathUtil.applyDeadband(controller.getRightX(), DriveConstants.DEAD_BAND);
 
         this.subsystem.drive(
-                this.xSpeedLimiter.calculate(xSpeed) * DriveConstants.MAX_SPEED,
-                this.ySpeedLimiter.calculate(ySpeed) * DriveConstants.MAX_SPEED,
-                this.rotateLimiter.calculate(rotation) * DriveConstants.MAX_ANGULAR_SPEED,
-                false
+                xSpeed * DriveConstants.MAX_SPEED,
+                ySpeed * DriveConstants.MAX_SPEED,
+                rotation * DriveConstants.MAX_ANGULAR_SPEED,
+                true
         );
     }
 

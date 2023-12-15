@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -34,10 +35,10 @@ public class SwerveSubsystem extends SubsystemBase {
             RobotConstants.TRACE_WIDTH, RobotConstants.WHEEL_BASE
     );
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-//    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-//            kinematics, this.gyro.getRotation2d(), this.getPosition()
-//    );
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+            kinematics, this.gyro.getRotation2d(), this.getPosition()
+    );
 
     public SwerveSubsystem() {
         this.gyro.reset();
@@ -61,14 +62,22 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
-//    public Pose2d getPose() {
-//        return this.odometry.getPoseMeters();
-//    }
-//
-//    @Override
-//    public void periodic() {
-//        this.odometry.update(this.gyro.getRotation2d(), this.getPosition());
-//    }
+    public double getHeading() {
+        return Math.IEEEremainder(this.gyro.getAngle(), 360);
+    }
+
+    public Rotation2d getRotation2d() {
+        return Rotation2d.fromDegrees(getHeading());
+    }
+
+    public Pose2d getPose() {
+        return this.odometry.getPoseMeters();
+    }
+
+    @Override
+    public void periodic() {
+        this.odometry.update(this.gyro.getRotation2d(), this.getPosition());
+    }
 
     public void drive(double xSpeed, double ySpeed, double rotation, boolean field) {
         SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(field ?
@@ -81,6 +90,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleState(SwerveModuleState[] states) {
         SwerveDriveKinematics.desaturateWheelSpeeds(states, RobotConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+
+        this.frontLeft.setDesiredState(states[ModuleIds.FRONT_LEFT.get()]);
+        this.frontRight.setDesiredState(states[ModuleIds.FRONT_RIGHT.get()]);
+        this.backLeft.setDesiredState(states[ModuleIds.BACK_LEFT.get()]);
+        this.backRight.setDesiredState(states[ModuleIds.BACK_RIGHT.get()]);
+    }
+
+    public void setAutoModuleState(ChassisSpeeds speeds) {
+        SwerveModuleState[] states = this.kinematics.toSwerveModuleStates(speeds);
 
         this.frontLeft.setDesiredState(states[ModuleIds.FRONT_LEFT.get()]);
         this.frontRight.setDesiredState(states[ModuleIds.FRONT_RIGHT.get()]);

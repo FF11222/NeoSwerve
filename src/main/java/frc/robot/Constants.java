@@ -6,7 +6,7 @@ public class Constants {
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double DEAD_BAND = 0.05;
-        public static final double MAX_SPEED = 0.5;
+        public static final double MAX_SPEED = 1.5;
         public static final double MAX_ANGULAR_SPEED = Math.PI / 2.0;
     }
 
@@ -42,5 +42,10 @@ public class Constants {
         public static final double FRONT_RIGHT = 88.505859375;
         public static final double BACK_LEFT = 271.7578125;
         public static final double BACK_RIGHT = 211.201171875;
+    }
+
+    public static final class AutoConstants {
+        public static final double PHYSICAL_MAX_SPEED = 1.0; // m/s
+        public static final double PHYSICAL_MAX_ACCELERATION = 0.5; // m/s^2
     }
 }

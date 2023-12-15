@@ -15,7 +15,7 @@ public class RobotContainer {
     private final SwerveSubsystem driveSubsystem = new SwerveSubsystem();
     private final XboxController driveController = new XboxController(0);
     private final SwerveDriveCommand driveCommand = new SwerveDriveCommand(driveSubsystem, driveController);
-    private final PathPlannerTrajectory trajectory = PathPlanner.loadPath("New Path"
+    private final PathPlannerTrajectory trajectory = PathPlanner.loadPath(Constants.AutoConstants.PATH_NAME
             , Constants.AutoConstants.PHYSICAL_MAX_SPEED, Constants.AutoConstants.PHYSICAL_MAX_ACCELERATION);
     private final PIDController xPID = new PIDController(0.01, 0, 0);
     private final PIDController yPID = new PIDController(0.01, 0, 0);

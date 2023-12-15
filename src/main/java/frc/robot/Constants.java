@@ -47,5 +47,6 @@ public class Constants {
     public static final class AutoConstants {
         public static final double PHYSICAL_MAX_SPEED = 1.0; // m/s
         public static final double PHYSICAL_MAX_ACCELERATION = 0.5; // m/s^2
+        public static final String PATH_NAME = "New Path";
     }
 }

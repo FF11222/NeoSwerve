@@ -1,12 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 public class Constants {
     public static final class DriveConstants {
         public static final double kP = 0.52;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double DEAD_BAND = 0.05;
-        public static final double MAX_SPEED = 1.5;
+        public static final double MAX_SPEED = 0.7;
         public static final double MAX_ANGULAR_SPEED = Math.PI / 2.0;
     }
 
@@ -48,5 +50,20 @@ public class Constants {
         public static final double PHYSICAL_MAX_SPEED = 1.0; // m/s
         public static final double PHYSICAL_MAX_ACCELERATION = 0.5; // m/s^2
         public static final String PATH_NAME = "New Path";
+    }
+
+    public static final class VisionConstants {
+        public static final double LimelightLensHeightMeters = 0.42;
+        public static final double GoalHeightMeters = 0.74;
+        public static final double LimelightMountAngleDegrees = 0;
+        public static final double LimelightHorizontalOffsetMeters = 0.275; // lenght from limelight to the center of robot
+
+        public static final double AutoTrackVerticalP = 0.8;
+        public static final double AutoTrackVerticalI = 2.0;
+        public static final double AutoTrackVerticalD = 0.01;
+
+        public static double AutoTrackRotationP = 0.8;
+        public static double AutoTrackRotationI = 2.0;
+        public static double AutoTrackRotationD = 0.01;
     }
 }

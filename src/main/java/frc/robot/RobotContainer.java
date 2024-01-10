@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AutoTrackCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -36,8 +37,9 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
-            this.autoPathCommand,
-                Commands.run(this.driveSubsystem::stopModules, this.driveSubsystem)
+//            this.autoPathCommand,
+//                Commands.run(this.driveSubsystem::stopModules, this.driveSubsystem)
+                new AutoTrackCommand(this.driveSubsystem)
         );
     }
 }
